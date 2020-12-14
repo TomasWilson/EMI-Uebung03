@@ -58,22 +58,31 @@ void draw()
     point(x, y);
   }
   
-  //draw amp / panning layout
-  line(425, 100, 625, 100);
-  line(425, 90, 425, 110);
-  line(625, 90, 625, 110);
+  //draw amp layout
+  line(425, 80, 625, 80);
+  line(425, 70, 425, 90);
+  line(625, 70, 625, 90);
   
   fill(255, 0, 0);
-  ellipse( map(pan, -1, 1, 425, 625) , 100, 15, 15);
+  ellipse( map(amp, 0, 1, 425, 625) , 80, 15, 15);
   
   fill(0, 102, 153);
-  
-  String t = mode_amp ? "Amplitude" : "Panning";
+  String t = mode_amp ? "Mode: Amplitude" : "Mode: Panning";
   textSize(25);
-  text(t, 470, 60);
+  text(t, 430, 40);
+  text("0", 420, 120);
+  text("1", 620, 120);
   
-  String l = mode_amp ? "0" : "L";
-  text(l, 420, 140);
-  String r = mode_amp ? "1" : "R";
-  text(r, 620, 140);
+  
+  //draw panning layout
+  line(425, 150, 625, 150);
+  line(425, 140, 425, 160);
+  line(625, 140, 625, 160);
+  
+  fill(255, 0, 0);
+  ellipse( map(pan, -1, 1, 425, 625) , 150, 15, 15);
+  fill(0, 102, 153);
+  text("L", 420, 190);
+  text("R", 620, 190);
+  
 }
