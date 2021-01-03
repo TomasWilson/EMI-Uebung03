@@ -11,16 +11,27 @@ void setup(){
 
 }
 
-float pitch = 600f; // pitch (frequency)
-float amp = 0.5f; // amplitude
-float pan = 0f; // panning scope
+float pitch = 600f; // pitch (frequency) [200, 1000]
+float amp = 0.5f; // amplitude [0, 1]
+float pan = 0f; // panning [-1, 1]
 boolean mode_amp = true; // true if mouseX controls the amplitude, false if mouseX controlls panning
-
+boolean playing = true; // true if the sound is currently playing, false otherwise
 
 void keyPressed(){
-  if (key == ' ') mode_amp = !mode_amp;
+  if (key == ' ') {
+    if(playing) {
+      sine.stop();
+    }
+    else {
+      sine.play();
+    }
+    playing = !playing;
+  }
 }
 
+void mousePressed(){
+    mode_amp = !mode_amp;
+}
 
 void draw()
 {
@@ -28,14 +39,13 @@ void draw()
   background(255);
   
   // update pitch
-  pitch = 200 + 800 * ((400-mouseY) / 400.0);
+  pitch = map(mouseY, 0, 400, 1000, 200);
   
   // update amp or pen variables depending on "mode"
   if (mode_amp) {
-    amp = mouseX / 700.0;
-  }
-  else {
-    pan = (mouseX / 700.0) * 2 - 1;
+    amp = map(mouseX, 0, 700, 0, 1);
+  } else {
+    pan = map(mouseX, 0, 700, -1, 1);
   }
   
   // set object properties
@@ -50,8 +60,8 @@ void draw()
   
   
   // draws a visual representation of the amplitude
-  // represented as a sine wave but the frequency is unrelated to this
-  // ( drawing an (up to) 1000Hz sine wave doesnt work on the expected window size - for obvious reasons)
+  // please note that the depiction of the sine wave does not have anything to do with the frequency.
+  // (drawing an (up to) 1000Hz sine wave doesnt really work on the expected window size - for obvious reasons)
   line(0, 200, 700, 200);
   for (int x = 0; x < 700; x++){
     float y = (amp * 200 * -sin((x/700.0) * TWO_PI)) + 200;
@@ -72,7 +82,7 @@ void draw()
   text(t, 430, 40);
   text("0", 420, 120);
   text("1", 620, 120);
-  
+   
   
   //draw panning layout
   line(425, 150, 625, 150);
@@ -81,6 +91,7 @@ void draw()
   
   fill(255, 0, 0);
   ellipse( map(pan, -1, 1, 425, 625) , 150, 15, 15);
+  
   fill(0, 102, 153);
   text("L", 420, 190);
   text("R", 620, 190);
